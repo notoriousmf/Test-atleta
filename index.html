@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Test Atleta 60’</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f3864">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f6f7fb;--fg:#1b1f2a;--card:#fff;--mut:#667085;--ac:#1f3864;--ac2:#e4ebf7;--bd:#d9dde6;--ok:#e6f4ea;--in:#fffbe6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151c;--fg:#e8eaf0;--card:#1c212b;--mut:#9aa3b5;--ac:#8fb3ff;--ac2:#25304a;--bd:#2f3647;--ok:#1d3326;--in:#2b2a1a}}
+:root[data-theme="dark"]{--bg:#12151c;--fg:#e8eaf0;--card:#1c212b;--mut:#9aa3b5;--ac:#8fb3ff;--ac2:#25304a;--bd:#2f3647;--ok:#1d3326;--in:#2b2a1a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding-bottom:80px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+main{max-width:640px;margin:0 auto;padding:12px}
+h1{font-size:20px;margin:6px 0 2px;color:var(--ac)}h2{font-size:16px;margin:16px 0 6px;color:var(--ac)}
+.sub{color:var(--mut);font-size:13px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}
+.row{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));margin-top:8px}
+label{font-size:12px;color:var(--mut);display:block}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--in);color:var(--fg);font:inherit}
+input[type=checkbox]{width:20px;height:20px;padding:0}
+details{margin-top:6px}summary{cursor:pointer;color:var(--ac);font-weight:600;font-size:14px}
+.how{font-size:13.5px;margin-top:6px;padding:8px 10px;background:var(--ac2);border-radius:8px}
+.how ol{margin:4px 0 4px 18px;padding:0}
+.t{display:flex;justify-content:space-between;gap:8px;font-weight:700}
+.out{background:var(--ok);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:14px}
+.out b{font-weight:700}
+.badge{background:var(--ac);color:var(--bg);border-radius:10px;padding:1px 8px;font-size:12px}
+.mut{color:var(--mut);font-size:12.5px}
+.ph{display:flex;gap:10px;align-items:flex-start}
+.ph .m{min-width:46px;text-align:center;font-weight:700;color:var(--ac)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px);z-index:20}
+nav button{flex:1;padding:12px 2px;border:0;background:none;color:var(--mut);font:600 12px inherit;font-family:inherit}
+nav button.on{color:var(--ac);box-shadow:inset 0 3px 0 var(--ac)}
+.tab{display:none}.tab.on{display:block}
+button.b{padding:10px 14px;border:0;border-radius:8px;background:var(--ac);color:var(--bg);font:600 14px inherit;font-family:inherit}
+svg{width:100%;height:auto}
+td{padding:5px 4px}td button{padding:4px 8px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--fg)}
+</style>
+</head>
+<body>
+<main>
+<div class="tab on" id="t0"></div>
+<div class="tab" id="t1"></div>
+<div class="tab" id="t2"></div>
+<div class="tab" id="t3"></div>
+<div class="tab" id="t4"></div>
+</main>
+<nav id="nav"></nav>
+<script>
+var S={};try{S=JSON.parse(localStorage.getItem("pt")||"{}")}catch(e){}
+function save(){try{localStorage.setItem("pt",JSON.stringify(S))}catch(e){}}
+function $(i){return document.getElementById(i)}
+function num(k){var v=parseFloat(String(S[k]||"").replace(",","."));return isNaN(v)?null:v}
+function fld(l,k,t,h){return '<div><label>'+l+'</label><input data-k="'+k+'" type="'+(t||"number")+'" '+((t||"number")=="number"?'inputmode="decimal" step="any"':'')+' placeholder="'+(h||"")+'"></div>'}
+function sel(l,k){return '<div><label>'+l+'</label><select data-k="'+k+'"><option value="">–</option><option>0</option><option>1</option><option>2</option><option>3</option></select></div>'}
+function how(t){return '<details><summary>Come si fa</summary><div class="how">'+t+'</div></details>'}
+
+/* ---------- ATLETA ---------- */
+function buildT1(){$("t1").innerHTML='<h1>Atleta</h1><p class="sub">I dati si salvano da soli sul tuo dispositivo.</p><div class="card"><div class="row">'+
+fld("Nome e cognome","a_nome","text")+fld("Data","a_data","date")+fld("Sport / ruolo","a_sport","text")+fld("Età","a_eta")+fld("Statura (cm)","a_h")+fld("Massa corporea (kg)","a_m","number","75")+fld("Altezza di spinta h_po (m)","a_hpo","number","0.40")+fld("Benessere (1-5)","a_ben")+fld("Infortuni / dolori recenti","a_inf","text")+
+'</div>'+how('<b>Altezza di spinta (h_po):</b> è la distanza di estensione delle gambe. Misurala una volta per atleta: con l’atleta in posizione di partenza dello squat jump (ginocchia a circa 90°) misura l’altezza del bacino/anca dal suolo; poi con l’atleta in piena estensione sulle punte misura di nuovo. La differenza in metri è h_po. Tienila fissa per tutte le sessioni.')+
+'<p class="mut">Se benessere ≤1 o c’è dolore acuto valuta se rimandare il test.</p></div><button class="b" id="reset">Svuota la scheda (l’archivio resta)</button>';
+$("reset").onclick=function(){if(confirm("Svuotare la scheda corrente? I test già salvati restano nell’archivio.")){S={};save();init()}}}
+
+/* ---------- SCREENING ---------- */
+var FMS=[
+["1. Deep Squat",0,"<ol><li>Piedi larghezza spalle, bastone sopra la testa con presa larga, gomiti a 90°.</li><li>Scendi il più possibile, talloni a terra, bastone sopra i piedi.</li><li>Fai fino a 3 prove; se serve ripeti con un rialzo sotto i talloni.</li></ol>3 = busto parallelo alla tibia, femori sotto l’orizzontale, ginocchia allineate ai piedi. 2 = stesso, ma solo con rialzo sotto i talloni. 1 = non riesce neanche così. 0 = dolore."],
+["2. Hurdle Step",1,"<ol><li>Ostacolo all’altezza della tuberosità tibiale, bastone sulle spalle.</li><li>Alza una gamba e scavalca l’ostacolo toccando il suolo con il tallone, poi torna.</li><li>Testa entrambi i lati, la gamba che si muove è quella testata.</li></ol>3 = anca, ginocchio e caviglia allineati, nessun movimento della zona lombare. 2 = perdi allineamento o compensi. 1 = tocchi l’ostacolo o perdi equilibrio. 0 = dolore."],
+["3. In-line Lunge",1,"<ol><li>Misura la lunghezza della tibia e segna un punto a terra con il piede anteriore.</li><li>Bastone dietro la schiena a contatto con testa, dorso e sacro.</li><li>Scendi finché il ginocchio posteriore tocca il suolo dietro al tallone anteriore.</li></ol>3 = bastone sempre a contatto, piedi in linea, busto fermo. 2 = perdi contatto o i piedi non sono in linea. 1 = perdi equilibrio. 0 = dolore."],
+["4. Shoulder Mobility",1,"<ol><li>Pugni chiusi con pollici dentro.</li><li>Una mano passa sopra la spalla, l’altra dietro la schiena, in un solo movimento.</li><li>Misura la distanza tra i due pugni e confrontala con la lunghezza della mano.</li></ol>3 = pugni a una mano di distanza. 2 = a una mano e mezza. 1 = oltre. 0 = dolore (anche nel clearing test: mano sulla spalla opposta con gomito alzato)."],
+["5. Active Straight Leg Raise",1,"<ol><li>Supino, tavola sotto le ginocchia, braccia lungo il corpo.</li><li>Segna il punto a metà tra spina iliaca e rotula.</li><li>Alza la gamba con ginocchio esteso e punta a martello, l’altra resta a terra.</li></ol>3 = malleolo sopra la linea di metà coscia. 2 = tra metà coscia e rotula. 1 = sotto la rotula. 0 = dolore."],
+["6. Trunk Stability Push-up",0,"<ol><li>Prono, mani larghezza spalle all’altezza della fronte (uomini) o del mento (donne).</li><li>Spingi su con il corpo in un blocco unico, senza cedere con la zona lombare.</li></ol>3 = 1 ripetizione con mani alla fronte (uomo) / mento (donna). 2 = mani più in basso (mento / clavicola). 1 = non riesce. 0 = dolore (anche nel clearing in estensione)."],
+["7. Rotary Stability",1,"<ol><li>Quadrupedia con tavola tra mani e ginocchia.</li><li>Estendi insieme braccio e gamba dello stesso lato, poi porta gomito e ginocchio a toccarsi.</li><li>Se non riesci, prova la diagonale (braccio e gamba opposti).</li></ol>3 = ripetizione corretta dello stesso lato, colonna parallela alla tavola. 2 = corretta in diagonale. 1 = non riesce. 0 = dolore (anche nel clearing in flessione)."]];
+function buildT2(){var h='<h1>Screening del movimento</h1><p class="sub">7 test stile FMS. Punteggio da 0 a 3 per lato; vale il più basso.</p>';
+FMS.forEach(function(t,i){h+='<div class="card"><div class="t"><span>'+t[0]+'</span><span class="badge" id="fsc'+i+'"></span></div>'+how(t[2])+'<div class="row">'+sel(t[1]?"Destra":"Punteggio","fd"+i)+(t[1]?sel("Sinistra","fs"+i):"")+'<div><label>Dolore</label><input type="checkbox" data-k="fp'+i+'"></div></div></div>'});
+h+='<div class="out" id="fres"></div><p class="mut">Totale ≤14 e asimmetrie sono segnali da approfondire, non una diagnosi: leggi sempre il dato insieme alla storia infortuni.</p>';
+$("t2").innerHTML=h}
+
+/* ---------- SALTI ---------- */
+function buildT3(){var h='<h1>Test di salto · OVR Jump</h1><p class="sub">Inserisci l’altezza (cm) letta dalla pedana. Mani ai fianchi, atterra a gambe tese sulla pedana.</p>';
+h+='<div class="card"><div class="t">Squat Jump (SJ)</div>'+how('<ol><li>Parti con ginocchia a circa 90°, mani ai fianchi, busto eretto.</li><li>Fermati 2-3 secondi, poi spingi verso l’alto senza alcun contromovimento.</li><li>Atterra sulla pedana a gambe tese. Fai 3 prove con 45-60 s di recupero.</li></ol>Scarta e ripeti i salti con contromovimento visibile.')+'<div class="row">'+fld("Prova 1","sj1")+fld("Prova 2","sj2")+fld("Prova 3","sj3")+'</div><div class="out" id="sjo"></div></div>';
+h+='<div class="card"><div class="t">Countermovement Jump (CMJ)</div>'+how('<ol><li>In piedi sulla pedana, mani ai fianchi.</li><li>Scendi velocemente e risali subito saltando il più in alto possibile.</li><li>Profondità libera ma uguale ad ogni prova. Atterra a gambe tese. 3 prove, 45-60 s di recupero.</li></ol>')+'<div class="row">'+fld("Prova 1","cm1")+fld("Prova 2","cm2")+fld("Prova 3","cm3")+'</div><div class="out" id="cmo"></div></div>';
+h+='<div class="card"><div class="t">Drop Jump (DJ) da 30 cm</div>'+how('<ol><li>Atleta in piedi su una cassa alta 30 cm, mani ai fianchi.</li><li>Scende con un piede (non salta) e atterra sulla pedana.</li><li>Appena tocca terra salta subito il più in alto possibile: “minimo tempo a terra, massima altezza”.</li><li>Gambe tese in volo. 3 prove con 1-2 minuti di recupero.</li></ol>RSI = altezza (m) / tempo di contatto (s).');
+for(var i=1;i<=3;i++)h+='<div class="row">'+fld("DJ "+i+" · contatto (ms)","dc"+i)+fld("Altezza (cm)","dh"+i)+'<div><label>RSI</label><div id="rsi'+i+'" class="badge" style="display:inline-block;margin-top:9px">–</div></div></div>';
+h+='<div class="out" id="djo"></div></div><div class="out" id="jres"></div>';
+$("t3").innerHTML=h}
+
+/* ---------- FORZA-VELOCITA ---------- */
+function nF(){return Math.min(10,Math.max(3,parseInt(S.fn)||5))}
+function buildT4(){var h='<h1>Profilo forza-velocità</h1><p class="sub">SJ con carichi crescenti (metodo Samozino). Inserisci il carico in kg e l’altezza dei salti: per ogni carico si usa il migliore.</p><div class="card">'+how('<ol><li>Misura massa corporea e h_po nella scheda Atleta.</li><li>Scegli i carichi in kg: 0 = solo peso corporeo, poi per esempio 15, 30, 45, 60 kg (adatti all’atleta). Servono almeno 3 carichi.</li><li>Per ogni carico fai 2-3 SJ con bilanciere sulle spalle, da ginocchia a 90° e senza contromovimento.</li><li>Recupero 2 minuti tra i carichi. Per il carico 0 va bene lo SJ già fatto (si compila da solo).</li><li>Con “＋ Aggiungi carico” inserisci altri carichi (massimo 10).</li></ol>');
+for(var i=0;i<nF();i++){h+='<div class="row" style="grid-template-columns:repeat(4,1fr)">'+fld("Carico (kg)","fp"+i,"number",i?"":"0")+fld("Prova 1 (cm)","f"+i+"a")+fld("Prova 2 (cm)","f"+i+"b")+fld("Prova 3 (cm)","f"+i+"c")+'</div><div class="mut" id="fl'+i+'" style="margin:3px 0 6px">–</div>'}
+h+='<div class="row"><button class="b" id="addl">＋ Aggiungi carico</button><button class="b" id="rml" style="background:var(--mut)">− Togli ultimo</button></div></div><div class="out" id="fvo"></div><div class="card"><div id="chart"></div></div>';
+$("t4").innerHTML=h;
+$("addl").onclick=function(){S.fn=String(Math.min(10,nF()+1));save();buildT4();fill();calc()};
+$("rml").onclick=function(){S.fn=String(Math.max(3,nF()-1));save();buildT4();fill();calc()}}
+
+/* ---------- CALCOLI ---------- */
+function stats(ks){var a=[];ks.forEach(function(k){var v=num(k);if(v!==null)a.push(v)});if(!a.length)return null;var m=a.reduce(function(x,y){return x+y},0)/a.length,sd=a.length>1?Math.sqrt(a.reduce(function(x,y){return x+(y-m)*(y-m)},0)/(a.length-1)):0;return{best:Math.max.apply(null,a),mean:m,cv:a.length>1?sd/m*100:null}}
+function f1(x,d){return x===null||x===undefined||isNaN(x)?"–":x.toFixed(d)}
+function hmod(F0,V0,m,H){var g=9.81,A=m*g/H,B=F0/V0*Math.sqrt(g/2),C=m*g-F0,d=B*B-4*A*C;if(d<0)return 0;var w=(-B+Math.sqrt(d))/(2*A);return w>0?w*w:0}
+function optp(m,H,P){var b=null,k,sl,V0,F0,h;for(k=0;k<=800;k++){sl=-(3+k*0.1)*m;V0=Math.sqrt(4*P/-sl);F0=-sl*V0;h=hmod(F0,V0,m,H);if(!b||h>b.h)b={sfv:sl,f0:F0,v0:V0,h:h}}return b}
+function calc(){
+var tot=0,as=0,pain=0,low=0,fill=0;
+FMS.forEach(function(t,i){var v=[S["fd"+i],t[1]?S["fs"+i]:""].filter(function(x){return x!==""&&x!==undefined}).map(Number),sc=$("fsc"+i);
+if(v.length){var m=Math.min.apply(null,v);tot+=m;fill++;if(m<=1)low++;sc.textContent=m+(t[1]&&v.length==2&&v[0]!=v[1]?" · asim.":"")}else sc.textContent="–";
+if(t[1]&&v.length==2&&v[0]!=v[1])as++;if(S["fp"+i])pain++});
+$("fres").innerHTML="Totale: <b>"+tot+"/21</b> ("+fill+"/7 test compilati)<br>Test con asimmetria: <b>"+as+"</b> · con dolore: <b>"+pain+"</b> · con punteggio ≤1: <b>"+low+"</b>";
+var sj=stats(["sj1","sj2","sj3"]),cm=stats(["cm1","cm2","cm3"]);
+function sh(o,s){if(!s)return "Inserisci le prove.";return "Migliore: <b>"+f1(s.best,1)+" cm</b> · Media: "+f1(s.mean,1)+" cm"+(s.cv!==null?" · CV: "+f1(s.cv,1)+"%":"")}
+$("sjo").innerHTML=sh(0,sj);$("cmo").innerHTML=sh(0,cm);R={fms:fill?tot:null,sj:sj?sj.best:null,cm:cm?cm.best:null,eur:sj&&cm?cm.best/sj.best:null};
+var br=null,bi=0,cvmax=0;
+for(var i=1;i<=3;i++){var c=num("dc"+i),h=num("dh"+i),r=(c&&h)?(h/100)/(c/1000):null;$("rsi"+i).textContent=r===null?"–":r.toFixed(2);if(r!==null&&(br===null||r>br)){br=r;bi=i}}
+$("djo").innerHTML=br===null?"Inserisci contatto e altezza.":"Miglior RSI: <b>"+br.toFixed(2)+" m/s</b> (contatto "+S["dc"+bi]+" ms, altezza "+S["dh"+bi]+" cm)";
+R.rsi=br;var j="";
+if(sj&&cm){var eur=cm.best/sj.best;j+="EUR (CMJ/SJ): <b>"+eur.toFixed(2)+"</b> · differenza CMJ-SJ: "+f1(cm.best-sj.best,1)+" cm ("+f1((cm.best-sj.best)/sj.best*100,1)+"%)<br>"+(eur<1.05?"Basso: poco uso del ciclo stiramento-accorciamento.":eur>1.2?"Alto: forte componente elastica oppure SJ penalizzato.":"Nella fascia tipica.")+" (soglie indicative)"}
+var cvm=Math.max(sj&&sj.cv||0,cm&&cm.cv||0);if(sj||cm)j+=(j?"<br>":"")+(cvm>5?"Prove poco ripetibili (CV > 5%): valuta di ripeterle.":"Ripetibilità delle prove: OK.");
+$("jres").innerHTML=j||"Gli indici compaiono quando inserisci SJ e CMJ.";
+/* F-V */
+var M=num("a_m"),H=num("a_hpo"),g=9.81,pts=[];
+for(var i=0;i<nF();i++){var ks=["f"+i+"a","f"+i+"b","f"+i+"c"],st=stats(ks),pct=num("fp"+i),best=st?st.best:null;
+if(i==0&&best===null&&sj)best=sj.best;
+var el=$("fl"+i);if(M&&H&&best&&pct!==null){var L=pct,F=(M+L)*g*(best/100/H+1),v=Math.sqrt(g*(best/100)/2);pts.push([v,F]);el.textContent="Carico "+L+" kg · migliore "+best+" cm · F "+Math.round(F)+" N · v "+v.toFixed(2)+" m/s"}else el.textContent=pct!==null?"Carico "+pct+" kg":"–"}
+var o=$("fvo");
+if(!M||!H)o.innerHTML="Inserisci massa corporea e h_po nella scheda Atleta.";
+else if(pts.length<3)o.innerHTML="Servono almeno 3 carichi compilati per il profilo.";
+else{var n=pts.length,sx=0,sy=0,sxx=0,sxy=0,syy=0;pts.forEach(function(p){sx+=p[0];sy+=p[1];sxx+=p[0]*p[0];sxy+=p[0]*p[1];syy+=p[1]*p[1]});
+var sl=(n*sxy-sx*sy)/(n*sxx-sx*sx),F0=(sy-sl*sx)/n,V0=-F0/sl,P=F0*V0/4,r2=Math.pow(n*sxy-sx*sy,2)/((n*sxx-sx*sx)*(n*syy-sy*sy));
+var OP=optp(M,H,P),hc=hmod(F0,V0,M,H),imb=100*(1-sl/OP.sfv);
+R.f0=F0/M;R.v0=V0;R.p=P/M;R.sfv=sl;R.imb=imb;
+o.innerHTML="F0: <b>"+Math.round(F0)+" N</b> ("+f1(F0/M,1)+" N/kg)<br>V0: <b>"+V0.toFixed(2)+" m/s</b><br>Pmax: <b>"+Math.round(P)+" W</b> ("+f1(P/M,1)+" W/kg)<br>Sfv (pendenza): <b>"+Math.round(sl)+"</b> · R²: "+r2.toFixed(2)+(r2<0.95?" (bassa: ricontrolla i dati)":"")+
+"<hr style='border:0;border-top:1px solid var(--bd)'><b>Profilo ottimale</b> (stessa Pmax, stessa h_po)<br>Sfv ottimale: <b>"+Math.round(OP.sfv)+"</b> · F0: "+f1(OP.f0/M,1)+" N/kg · V0: "+OP.v0.toFixed(2)+" m/s<br>SJ stimato dal modello: attuale <b>"+f1(hc*100,1)+" cm</b> → ottimale <b>"+f1(OP.h*100,1)+" cm</b> ("+(OP.h>=hc?"+":"")+f1((OP.h-hc)*100,1)+" cm)<br>Squilibrio F-V: <b>"+f1(imb,0)+"%</b><br><span class='mut'>"+(Math.abs(imb)<10?"Profilo vicino all’ottimale (soglia ±10% indicativa).":imb>0?"Profilo orientato alla velocità (deficit di forza): lavora di più sulla forza con carichi alti.":"Profilo orientato alla forza (deficit di velocità): lavora di più su velocità ed esplosività con carichi leggeri.")+" Il valore ottimale dipende da massa, h_po e Pmax: confrontalo sempre con le prove sul campo.</span>";
+var W=320,Hh=250,Lf=52,Bt=46,T=24,Rg=12,xs=pts.map(function(p){return p[0]}),ys=pts.map(function(p){return p[1]}),x1=Math.max(V0,OP.v0,Math.max.apply(null,xs))*1.05,y1=Math.max(F0,OP.f0,Math.max.apply(null,ys))*1.05,tc='#888';
+function X(v){return Lf+v/x1*(W-Lf-Rg)}function Y(f){return Hh-Bt-f/y1*(Hh-Bt-T)}
+var s='<svg viewBox="0 0 '+W+' '+Hh+'" font-family="Arial,sans-serif"><line x1="'+Lf+'" y1="'+Y(0)+'" x2="'+(W-Rg)+'" y2="'+Y(0)+'" stroke="'+tc+'"/><line x1="'+Lf+'" y1="'+T+'" x2="'+Lf+'" y2="'+Y(0)+'" stroke="'+tc+'"/>';
+[0,0.5,1].forEach(function(t){s+='<text x="'+X(t*x1)+'" y="'+(Y(0)+14)+'" font-size="10" fill="'+tc+'" text-anchor="middle">'+(t*x1).toFixed(1)+'</text><text x="'+(Lf-5)+'" y="'+(Y(t*y1)+3)+'" font-size="10" fill="'+tc+'" text-anchor="end">'+Math.round(t*y1)+'</text>'});
+s+='<line x1="'+X(0)+'" y1="'+Y(OP.f0)+'" x2="'+X(OP.v0)+'" y2="'+Y(0)+'" stroke="#2e9e5b" stroke-width="2" stroke-dasharray="6 4"/><line x1="'+X(0)+'" y1="'+Y(F0)+'" x2="'+X(V0)+'" y2="'+Y(0)+'" stroke="#e67e22" stroke-width="2"/>';
+pts.forEach(function(p){s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="4" fill="#3b6fd4"/>'});
+s+='<text x="'+((Lf+W-Rg)/2)+'" y="'+(Hh-6)+'" font-size="12" font-weight="bold" fill="'+tc+'" text-anchor="middle">Velocità media (m/s)</text><text transform="rotate(-90)" x="'+(-(T+Y(0))/2)+'" y="13" font-size="12" font-weight="bold" fill="'+tc+'" text-anchor="middle">Forza media (N)</text>';
+s+='<text x="'+Lf+'" y="12" font-size="10" fill="#e67e22">━ attuale</text><text x="'+(Lf+70)+'" y="12" font-size="10" fill="#2e9e5b">╍ ottimale</text><text x="'+(Lf+145)+'" y="12" font-size="10" fill="#3b6fd4">● dati</text></svg>';$("chart").innerHTML=s}
+if(pts.length<3)$("chart").innerHTML='<span class="mut">Il grafico compare con almeno 3 carichi.</span>'}
+
+/* ---------- ARCHIVIO ---------- */
+var DB={s:[]},R={},Q='';try{var rw=localStorage.getItem('ptdb');if(rw)DB=JSON.parse(rw)}catch(e){}
+function sdb(){try{localStorage.setItem('ptdb',JSON.stringify(DB))}catch(e){}}
+function esc(t){return String(t).replace(/[&<>]/g,function(c){return c=='&'?'&amp;':c=='<'?'&lt;':'&gt;'})}
+function msg(t){var m=$('msg');if(m)m.textContent=t}
+function nk(n){return String(n||'').trim().toLowerCase()}
+function today(){return new Date().toISOString().slice(0,10)}
+function cp(o){return JSON.parse(JSON.stringify(o))}
+function go(i){document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('on',j==i)});document.querySelectorAll('nav button').forEach(function(x,j){x.classList.toggle('on',j==i)});window.scrollTo(0,0)}
+function out(name,text){try{var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain'}));a.download=name;document.body.appendChild(a);a.click();a.remove()}catch(e){}var x=$('exp');x.style.display='block';x.value=text;x.select();msg('File '+name+' pronto. Se il download non parte, copia il testo qui sotto e incollalo in un file con quel nome.')}
+function autosave(){var n=String(S.a_nome||'').trim();if(!n)return;if(!S._id)S._id=Date.now();var rec={id:S._id,n:n,d:S.a_data||today(),s:cp(S),r:cp(R)},i=DB.s.findIndex(function(x){return x.id==rec.id});if(i>=0)DB.s[i]=rec;else DB.s.push(rec);sdb();save();list()}
+function dv(a,k,d){var u=(a[0].r||{})[k],v=(a[a.length-1].r||{})[k];return a.length>1&&u!=null&&v!=null?(v-u>=0?'+':'')+(v-u).toFixed(d):'–'}
+function list(){var l=$('lst');if(!l)return;var g={},h='',ks,q=nk(Q);
+$('cur').innerHTML=S.a_nome?"<div class='card'><div class='t'><span>In corso: "+esc(S.a_nome)+"</span><button class='b'>Continua</button></div></div>":'';
+DB.s.forEach(function(x){var k=nk(x.n);if(q&&k.indexOf(q)<0)return;(g[k]=g[k]||[]).push(x)});ks=Object.keys(g).sort();
+if(!ks.length)h="<div class='card mut'>"+(DB.s.length?'Nessun atleta trovato.':'Nessun atleta ancora: premi “Nuovo test” per iniziare.')+"</div>";
+ks.forEach(function(k){var a=g[k].sort(function(p,s){return p.d<s.d?-1:1}),z=a[a.length-1];
+h+="<details class='card'><summary><b>"+esc(z.n)+"</b> <span class='mut'>· "+a.length+" test · ultimo "+esc(z.d)+"</span></summary><div style='margin-top:8px'><button class='b' data-a='new' data-i='"+z.id+"'>Nuovo test per "+esc(z.n)+"</button></div>"+(a.length>1?"<p class='mut'>Dal primo all’ultimo test: CMJ "+dv(a,'cm',1)+" cm · RSI "+dv(a,'rsi',2)+" · potenza "+dv(a,'p',1)+" W/kg</p>":'')+"<div style='overflow-x:auto'><table style='border-collapse:collapse;width:100%;font-size:12.5px;margin-top:8px'><tr class='mut'><td>Data</td><td>SJ</td><td>CMJ</td><td>EUR</td><td>RSI</td><td>FMS</td><td>W/kg</td><td></td></tr>";
+a.forEach(function(x){var r=x.r||{};h+="<tr style='border-top:1px solid var(--bd)'><td>"+esc(x.d)+"</td><td>"+f1(r.sj,1)+"</td><td>"+f1(r.cm,1)+"</td><td>"+f1(r.eur,2)+"</td><td>"+f1(r.rsi,2)+"</td><td>"+f1(r.fms,0)+"</td><td>"+f1(r.p,1)+"</td><td style='white-space:nowrap'><button data-a='open' data-i='"+x.id+"'>Apri</button> <button data-a='del' data-i='"+x.id+"'>✕</button></td></tr>"});
+h+="</table></div></details>"});l.innerHTML=h}
+function buildHome(){$('t0').innerHTML="<h1>Test Atleta 60’</h1><button class='b' id='nw' style='width:100%;padding:14px;font-size:16px;margin-top:6px'>＋ Nuovo test</button><div id='cur'></div><h2>Atleti già testati</h2><input id='q' placeholder='Cerca atleta…'><div id='lst'></div><details class='card'><summary>Backup ed esportazione</summary><div class='row'><button class='b' id='ej'>Backup (JSON)</button><button class='b' id='ec'>Tabella (CSV)</button></div><div class='row'><div><label>Ripristina da backup JSON</label><input type='file' id='imp' accept='.json,application/json'></div></div><textarea id='exp' rows='6' style='display:none;margin-top:8px' readonly></textarea><p class='mut' id='msg'></p></details><p class='mut'>I test si salvano da soli appena inserisci il nome dell’atleta. Fai ogni tanto un backup.</p>";
+$('nw').onclick=function(){S={};save();init();go(1)};
+$('cur').onclick=function(e){if(e.target.closest('button'))go(1)};
+$('q').value=Q;$('q').oninput=function(){Q=this.value;list()};
+$('lst').onclick=function(e){var b=e.target.closest('button');if(!b)return;var id=+b.dataset.i,x=DB.s.find(function(y){return y.id==id});if(!x)return;
+if(b.dataset.a=='open'){S=cp(x.s);S._id=x.id;save();init();go(1)}
+else if(b.dataset.a=='del'){if(confirm('Eliminare questo test?')){DB.s=DB.s.filter(function(y){return y.id!=id});sdb();if(S._id==id){S={};save();init()}else list()}}
+else{var s=x.s;S={a_nome:s.a_nome,a_sport:s.a_sport,a_eta:s.a_eta,a_h:s.a_h,a_m:s.a_m,a_hpo:s.a_hpo,a_data:today()};save();init();go(1)}};
+$('ej').onclick=function(){out('backup_test_atleti.json',JSON.stringify(DB))};
+$('ec').onclick=function(){var c=function(v){return v===null||v===undefined?'':String(Math.round(v*100)/100).replace('.',',')},nl=String.fromCharCode(10),t='Nome;Data;SJ cm;CMJ cm;EUR;RSI;FMS;F0 N/kg;V0 m/s;Pmax W/kg;Sfv'+nl;DB.s.slice().sort(function(p,q){var a=nk(p.n),b=nk(q.n);return a<b?-1:a>b?1:p.d<q.d?-1:1}).forEach(function(x){var r=x.r||{};t+=[x.n,x.d,c(r.sj),c(r.cm),c(r.eur),c(r.rsi),c(r.fms),c(r.f0),c(r.v0),c(r.p),c(r.sfv)].join(';')+nl});out('test_atleti.csv',t)};
+$('imp').onchange=function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var o=JSON.parse(rd.result),n=0;(o.s||[]).forEach(function(x){if(!DB.s.some(function(y){return y.id==x.id})){DB.s.push(x);n++}});sdb();list();msg('Importati '+n+' test.')}catch(e){msg('File non valido.')}};rd.readAsText(f)};
+list()}
+
+/* ---------- AVVIO ---------- */
+function fill(){document.querySelectorAll("[data-k]").forEach(function(e){var v=S[e.dataset.k];if(v!==undefined){if(e.type=="checkbox")e.checked=v==="1";else e.value=v}})}
+function init(){buildT1();buildT2();buildT3();buildT4();buildHome();if(S.fp0===undefined)S.fp0="0";fill();calc()}
+document.addEventListener("input",function(e){var k=e.target.dataset&&e.target.dataset.k;if(!k)return;S[k]=e.target.type=="checkbox"?(e.target.checked?"1":""):e.target.value;save();calc();autosave()});
+try{if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}
+var NAV=["Archivio","Atleta","Screening","Salti","F-V"];
+NAV.forEach(function(n,i){var b=document.createElement("button");b.textContent=n;b.onclick=function(){document.querySelectorAll(".tab").forEach(function(t,j){t.classList.toggle("on",j==i)});document.querySelectorAll("nav button").forEach(function(x,j){x.classList.toggle("on",j==i)});window.scrollTo(0,0)};if(!i)b.className="on";$("nav").appendChild(b)});
+init();
+</script>
+</body>
+</html>
